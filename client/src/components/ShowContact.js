@@ -1,6 +1,7 @@
 import React from 'react';
 import { removeContact, getAllContact } from '../action/contact';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 
 import '../pages/contract/Contact.css';
 const ShowContact = props => {
@@ -12,7 +13,7 @@ const ShowContact = props => {
   //this const present all contants
   const showAll = props.contacts.map(el => {
     return (
-      <div className='contact' key={el.id}>
+      <div style={{ cursor: 'pointer' }} className='contact' key={el.id}>
         <div className='contact-avatar'>
           <img src={el.avatar} alt='avatar' />
         </div>
@@ -22,7 +23,12 @@ const ShowContact = props => {
         </div>
         <div className='contact-buttons'>
           <button>
-            <i className='fa fa-phone' aria-hidden='true'></i>
+            <Link
+              style={{ textDecoration: 'none', color: '#FFF' }}
+              to={`/contatcs/${el.id}`}
+            >
+              <i className='fa fa-phone' aria-hidden='true'></i>
+            </Link>
           </button>
         </div>
         <div

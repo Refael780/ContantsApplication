@@ -12,14 +12,11 @@ class Contact extends Component {
   };
 
   serchHandler = async e => {
-    console.log(e.currentTarget.value);
-
     if (typeof e.currentTarget.value[0] === 'string') {
       let con = this.props.contacts.filter(
         suggestion =>
-          suggestion.name
-            .toLowerCase()
-            .indexOf(e.currentTarget.value.toLowerCase()) > -1
+          suggestion.name.toLowerCase().indexOf(e.target.value.toLowerCase()) >
+          -1
       );
       await this.props.filterContent(con);
     }

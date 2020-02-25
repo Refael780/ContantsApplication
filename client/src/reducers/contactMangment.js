@@ -1,5 +1,6 @@
 import {
   GET_CONTACT,
+  UPDATE_CONTACT,
   GET_ALL_CONTACT,
   REMOVE_CONTACT,
   FILLTER_CONTACT,
@@ -22,7 +23,7 @@ export default (state = initialState, action) => {
     case GET_CONTACT: {
       return {
         ...state,
-        contact: state.contacts.filter(el => el.id !== payload)
+        contact: state.contacts.filter(el => el.id == payload)
       };
     }
     case SET_CONTACT:
@@ -30,6 +31,11 @@ export default (state = initialState, action) => {
         ...state,
         contact: payload
       };
+    case UPDATE_CONTACT: {
+      return {
+        ...state
+      };
+    }
     case GET_ALL_CONTACT_ERROR:
     case SET_CONTACT_ERROR:
       return {

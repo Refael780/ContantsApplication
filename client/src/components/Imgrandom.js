@@ -1,12 +1,14 @@
 import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
 import LoadingSpinner from '../Layout/LoadingSpinner/LoadingSpinner';
+
+// this Fcomponent show random  avatar
 const Imgrandom = props => {
-  return props.isLoading ? (
-    <LoadingSpinner />
-  ) : (
+  let src = props.Customimg;
+
+  return (
     <Fragment>
-      <img src={props.imgUrl} alt='avatar' />
+      <img src={src} alt='avatar' />
     </Fragment>
   );
 };

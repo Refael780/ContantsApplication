@@ -1,11 +1,12 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 import { setAlert } from '../action/setAlert';
-import { setContact, getContent } from '../action/contact';
+import { setContact, getContent, updateContact } from '../action/contact';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import AlertOn from '../Layout/AlertOn';
 import 'bootstrap/dist/css/bootstrap.css';
 
+// // this Fcomponent  that charge on the form component
 const AddContactsForm = props => {
   // loacl state
   const [formData, setFormData] = useState({
@@ -16,9 +17,26 @@ const AddContactsForm = props => {
   });
 
   const errorMsg = [];
-
   const { Name, Phone, Title } = formData;
   let { isRedirect } = formData;
+  useEffect(() => {
+    if (props.disabled) {
+      const msg = 'The selected contact does not exist';
+      errorMsg.push(msg);
+      props.setAlert(errorMsg);
+    } else {
+      if (props.saveContant != null) {
+        if (props.saveContant.length > 0) {
+          setFormData({
+            ...formData,
+            Name: props.saveContant[0].name,
+            Phone: props.saveContant[0].phone,
+            Title: props.saveContant[0].title
+          });
+        }
+      }
+    }
+  }, [props.saveContant, props.disabled]);
 
   const onChange = e => {
     setFormData({
@@ -44,8 +62,9 @@ const AddContactsForm = props => {
     if (!isValid) pushErrorMassage('Title is Requierd');
     isValid = Phone.toString().length <= 15;
     if (!isValid) pushErrorMassage('Phone Number Cant be more 30 Numbers');
+
+    // Reg expression for validate phone Number
     const phoneno = /^(\d+-?)+\d+$/;
-    console.log(Phone.match(phoneno));
 
     isValid = Phone.match(phoneno) !== null;
     if (!isValid) pushErrorMassage('Iligal phone format');
@@ -57,10 +76,22 @@ const AddContactsForm = props => {
   const RegisterHandler = async e => {
     e.preventDefault();
     if (!checkValidity(Name, Phone, Title)) {
+      console.log(props.saveContant[0].id);
       props.setAlert(errorMsg);
     } else {
-      await props.setContact(Name, Phone, Title, props.imgUrl);
-      setFormData({ ...formData, isRedirect: true });
+      if (props.saveContant !== null) {
+        await props.updateContact(
+          props.saveContant[0].id,
+          Name,
+          Phone,
+          Title,
+          props.saveContant[0].avatar
+        );
+        setFormData({ ...formData, isRedirect: true });
+      } else {
+        await props.setContact(Name, Phone, Title, props.imgUrl);
+        setFormData({ ...formData, isRedirect: true });
+      }
     }
   };
 
@@ -78,32 +109,35 @@ const AddContactsForm = props => {
           <div className='new-contact-input'>
             <label>Name</label>
             <input
-              value={Name.value}
+              value={Name}
               onChange={e => onChange(e)}
               required
               name='Name'
               type='text'
+              disabled={props.disabled}
             />
           </div>
           <div className='new-contact-input'>
             <label>Phone</label>
 
             <input
-              value={Phone.value}
+              value={Phone}
               onChange={e => onChange(e)}
               required
               name='Phone'
               type='text'
+              disabled={props.disabled}
             />
           </div>
           <div className='new-contact-input'>
             <label>Title</label>
             <input
-              value={Title.value}
+              value={Title}
               onChange={e => onChange(e)}
               required
               name='Title'
               type='text'
+              disabled={props.disabled}
             />
           </div>
           <div className='new-contact-buttons'>
@@ -111,6 +145,7 @@ const AddContactsForm = props => {
               onClick={e => RegisterHandler(e)}
               type='submit'
               className='button-ok'
+              disabled={props.disabled}
             >
               Save
             </button>
@@ -118,6 +153,7 @@ const AddContactsForm = props => {
               onClick={e => cencleHandler(e)}
               type='submit'
               className='button-cancel'
+              disabled={props.disabled}
             >
               Cancel
             </button>
@@ -134,6 +170,9 @@ const mapStateToProps = state => ({
   contact: state.contactMangment.contact
 });
 
-export default connect(mapStateToProps, { setAlert, setContact, getContent })(
-  AddContactsForm
-);
+export default connect(mapStateToProps, {
+  setAlert,
+  setContact,
+  getContent,
+  updateContact
+})(AddContactsForm);

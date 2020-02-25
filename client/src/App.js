@@ -12,6 +12,8 @@ const App = () => (
       <Fragment>
         <Switch>
           <Route exact path='/contatcs/new' component={NewContact}></Route>
+          <Route exact path='/contatcs/:id' component={NewContact}></Route>
+
           <Route path='/' component={Contact}></Route>
         </Switch>
       </Fragment>

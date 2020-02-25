@@ -5,10 +5,36 @@ import {
   SET_CONTACT,
   SET_CONTACT_ERROR,
   GET_ALL_CONTACT_ERROR,
-  FILLTER_CONTACT
+  FILLTER_CONTACT,
+  UPDATE_CONTACT
 } from './type';
 import axios from 'axios';
+export const updateContact = (
+  id,
+  Name,
+  Phone,
+  Title,
+  imgUrl
+) => async dispatch => {
+  try {
+    const config = {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    };
 
+    const body = JSON.stringify({ Name, Phone, Title, imgUrl });
+    const res = await axios.put(`/api/contacts/${id}`, body, config);
+    dispatch({
+      type: UPDATE_CONTACT,
+      payload: res.data
+    });
+  } catch (error) {
+    dispatch({
+      type: SET_CONTACT_ERROR
+    });
+  }
+};
 export const removeContact = id => async dispatch => {
   try {
     await axios.delete(`/api/contacts/${id}`);
@@ -25,7 +51,7 @@ export const filterContent = con => dispatch => {
   });
 };
 
-export const getContent = id => dispatch => {
+export const getContent = id => async dispatch => {
   dispatch({
     type: GET_CONTACT,
     payload: id
@@ -39,8 +65,6 @@ export const getAllContact = () => async dispatch => {
       payload: res.data
     });
   } catch (error) {
-    console.log(error);
-
     dispatch({
       type: GET_ALL_CONTACT_ERROR,
       payload: error
@@ -55,9 +79,6 @@ export const setContact = (Name, Phone, Title, imgUrl) => async dispatch => {
       }
     };
     const body = JSON.stringify({ Name, Phone, Title, imgUrl });
-
-    console.log('BODY');
-    console.log(body);
 
     const res = await axios.post('/api/contacts', body, config);
 

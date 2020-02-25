@@ -2,6 +2,7 @@ const Sequelize = require('sequelize');
 
 const sequelize = require('../utils/database/database');
 
+// Contants Model
 const Contracts = sequelize.define('contracts', {
   id: {
     type: Sequelize.INTEGER,
