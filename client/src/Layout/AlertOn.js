@@ -12,7 +12,6 @@ const AlertOn = ({ alerts }) =>
     <Fragment key={alert.id}>
       <Alert key={alert.id} color='danger'>
         {alert}
-        {console.log(alert)}
       </Alert>
     </Fragment>
   ));

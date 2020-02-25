@@ -76,7 +76,6 @@ const AddContactsForm = props => {
   const RegisterHandler = async e => {
     e.preventDefault();
     if (!checkValidity(Name, Phone, Title)) {
-      console.log(props.saveContant[0].id);
       props.setAlert(errorMsg);
     } else {
       if (props.saveContant !== null) {

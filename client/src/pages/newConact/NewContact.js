@@ -49,7 +49,6 @@ class NewContact extends Component {
         <div className='contact-container'>
           <div className='new-contact-container'>
             <div className='new-contact-avatar'>
-              {console.log(this.state.imgUrl)}
               <Imgrandom Customimg={this.state.imgUrl}></Imgrandom>
               <button
                 disabled={this.state.disableButton}
